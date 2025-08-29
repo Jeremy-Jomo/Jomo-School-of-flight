@@ -1,5 +1,8 @@
-from lib.school.db import SessionLocal
+from lib.school.db import SessionLocal, Base, engine
+from lib.school import models
 from lib.school.models import Student, Teacher, Course
+
+Base.metadata.create_all(engine)
 
 def main():
     session = SessionLocal()
@@ -106,7 +109,7 @@ def main():
             teacher_id = int(input("Enter teacher ID for this course: "))
             teacher = session.get(Teacher, teacher_id)
             if teacher:
-                course = Course(name=name, teacher=teacher)
+                course = Course(name=name, teacher_id=teacher.id)
                 session.add(course)
                 session.commit()
                 print(f"✅ Course '{name}' added with teacher {teacher.name}.")
@@ -136,7 +139,7 @@ def main():
 
         elif choice == "12":
             course_id = int(input("Enter course ID: "))
-            student = session.get(Student, student_id)
+            course = session.get(Course, course_id)
             if course:
                 if course.students:
                     print(f"Students in {course.name}:")
@@ -149,7 +152,7 @@ def main():
 
         elif choice == "13":
             student_id = int(input("Enter student ID: "))
-            course = session.get(Course, course_id)
+            student = session.get(Student, student_id)
             if student:
                 if student.courses:
                     print(f"Courses for {student.name}:")
@@ -161,8 +164,7 @@ def main():
                 print("⚠️ Student not found.")
 
         elif choice == "14":
-            print("👋 Exiting..." \
-            "BYEEEE👋👋👋👋")
+            print("👋 Exiting... BYEEEE 👋👋👋👋")
             break
 
         else:

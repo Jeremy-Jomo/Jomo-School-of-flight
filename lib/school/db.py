@@ -8,7 +8,7 @@ DATABASE_URL = "sqlite:///student.db"  # SQLite database file in project root
 engine = create_engine(DATABASE_URL)
 
 # Session factory
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+SessionLocal = sessionmaker(bind=engine)
 
 # Base class for models
 Base = declarative_base()
