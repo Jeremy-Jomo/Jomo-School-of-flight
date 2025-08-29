@@ -1,30 +1,36 @@
-# lib/school/models.py
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from lib.school.db import Base
+from .db import Base
+
+# Association table for many-to-many relationship (students <-> courses)
+student_course = Table(
+    "student_course",
+    Base.metadata,
+    Column("student_id", ForeignKey("students.id"), primary_key=True),
+    Column("course_id", ForeignKey("courses.id"), primary_key=True),
+)
 
 class Student(Base):
     __tablename__ = "students"
-
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
+    name = Column(String)
+    age = Column(Integer)
 
-    teachers = relationship("Teacher", back_populates="student")
-
-    def __repr__(self):
-        return f"<Student(id={self.id}, name='{self.name}', age={self.age})>"
-
+    courses = relationship("Course", secondary=student_course, back_populates="students")
 
 class Teacher(Base):
     __tablename__ = "teachers"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    subject = Column(String)
 
+    courses = relationship("Course", back_populates="teacher")
+
+class Course(Base):
+    __tablename__ = "courses"
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    subject = Column(String, nullable=False)
+    teacher_id = Column(Integer, ForeignKey("teachers.id"))
 
-    student_id = Column(Integer, ForeignKey("students.id"))
-    student = relationship("Student", back_populates="teachers")
-
-    def __repr__(self):
-        return f"<Teacher(id={self.id}, name='{self.name}', subject='{self.subject}')>"
+    teacher = relationship("Teacher", back_populates="courses")
+    students = relationship("Student", secondary=student_course, back_populates="courses")
