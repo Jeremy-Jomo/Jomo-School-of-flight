@@ -2,6 +2,7 @@ from lib.school.db import SessionLocal, Base, engine
 from lib.school import models
 from lib.school.models import Student, Teacher, Course
 
+# Create tables if not exist
 Base.metadata.create_all(engine)
 
 def main():
@@ -45,7 +46,7 @@ def main():
 
         elif choice == "3":
             student_id = int(input("Enter student ID to update: "))
-            student = session.get(Student, student_id)
+            student = session.query(Student).filter_by(id=student_id).first()
             if student:
                 student.name = input(f"Enter new name (current: {student.name}): ") or student.name
                 age = input(f"Enter new age (current: {student.age}): ")
@@ -57,7 +58,7 @@ def main():
 
         elif choice == "4":
             student_id = int(input("Enter student ID to delete: "))
-            student = session.get(Student, student_id)
+            student = session.query(Student).filter_by(id=student_id).first()
             if student:
                 session.delete(student)
                 session.commit()
@@ -84,7 +85,7 @@ def main():
 
         elif choice == "7":
             teacher_id = int(input("Enter teacher ID to update: "))
-            teacher = session.get(Teacher, teacher_id)
+            teacher = session.query(Teacher).filter_by(id=teacher_id).first()
             if teacher:
                 teacher.name = input(f"Enter new name (current: {teacher.name}): ") or teacher.name
                 teacher.subject = input(f"Enter new subject (current: {teacher.subject}): ") or teacher.subject
@@ -95,7 +96,7 @@ def main():
 
         elif choice == "8":
             teacher_id = int(input("Enter teacher ID to delete: "))
-            teacher = session.get(Teacher, teacher_id)
+            teacher = session.query(Teacher).filter_by(id=teacher_id).first()
             if teacher:
                 session.delete(teacher)
                 session.commit()
@@ -107,7 +108,7 @@ def main():
         elif choice == "9":
             name = input("Enter course name: ")
             teacher_id = int(input("Enter teacher ID for this course: "))
-            teacher = session.get(Teacher, teacher_id)
+            teacher = session.query(Teacher).filter_by(id=teacher_id).first()
             if teacher:
                 course = Course(name=name, teacher_id=teacher.id)
                 session.add(course)
@@ -128,8 +129,8 @@ def main():
         elif choice == "11":
             student_id = int(input("Enter student ID: "))
             course_id = int(input("Enter course ID: "))
-            student = session.get(Student, student_id)
-            course = session.get(Course, course_id)
+            student = session.query(Student).filter_by(id=student_id).first()
+            course = session.query(Course).filter_by(id=course_id).first()
             if student and course:
                 course.students.append(student)
                 session.commit()
@@ -139,7 +140,7 @@ def main():
 
         elif choice == "12":
             course_id = int(input("Enter course ID: "))
-            course = session.get(Course, course_id)
+            course = session.query(Course).filter_by(id=course_id).first()
             if course:
                 if course.students:
                     print(f"Students in {course.name}:")
@@ -152,7 +153,7 @@ def main():
 
         elif choice == "13":
             student_id = int(input("Enter student ID: "))
-            student = session.get(Student, student_id)
+            student = session.query(Student).filter_by(id=student_id).first()
             if student:
                 if student.courses:
                     print(f"Courses for {student.name}:")
