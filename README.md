@@ -36,7 +36,7 @@ A command-line interface (CLI) tool to manage students, teachers, and courses us
 
 4. **Start the CLI:**
    ```bash
-   python lib/school/cli.py
+   python -m lib.school.cli
    ```
 
 ---
@@ -93,7 +93,7 @@ Enter new age (current: 20):
 
 ---
 
-### **5. Add Teacher**
+### **5. Adclid Teacher**
 ➡️ Prompts for teacher name and subject.
 
 ### **6. List Teachers**
