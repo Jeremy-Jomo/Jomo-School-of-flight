@@ -1,8 +1,8 @@
-from lib.school.db import SessionLocal, Base, engine
-from lib.school import models
-from lib.school.models import Student, Teacher, Course
+#!/usr/bin/env python3
+from .db import SessionLocal, Base, engine
+from . import models
+from .models import Student, Teacher, Course
 
-# Create tables if not exist
 Base.metadata.create_all(engine)
 
 def main():
